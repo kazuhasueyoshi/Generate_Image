@@ -8,7 +8,7 @@ class IndexView(generic.TemplateView):
     #おそらく初期設定
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
-        context["message"] = "Template Viewの変数"
+        context["message"] = "ほーむがめん"
         return context
     #get処理
     def get(self, request, *args, **kwargs):
