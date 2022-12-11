@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>トップページ</title>
+    <p>{{message}}</p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="message" placeholder="表示文">
+        <input type="submit" value="クリック">
+    </form>
+    <a href="{% url 'myprofile:GAN_page' %}">PGGANによる画像生成</a>
+</head>
+</html>
