@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.views import generic
 from . import apps
-
 # Create your views here.
 class IndexView(generic.TemplateView):
     template_name = "index.html"
@@ -56,3 +55,8 @@ class test(generic.TemplateView):
             pass
         return render(request, "GAN_page.html", self.context)
         #post以外にルーティングできない問題を早急に解決すべし。
+
+
+class Image_AugmentationView(generic.TemplateView):
+    def __init__(self):
+        self.template_name = "Image_Augmentation.html"

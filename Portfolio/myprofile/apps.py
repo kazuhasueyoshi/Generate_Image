@@ -12,16 +12,11 @@ import glob
 from torchvision import transforms
 from tensorflow.keras.utils import load_img, img_to_array
 import torch
-from torch import nn
 
 class MyprofileConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'myprofile'
-
-class generate_image():
-    def message(self, message):
-        return message
-
+    
 class PixelNorm(nn.Module):
     def forward(self, x):
         eps = 1e-7
