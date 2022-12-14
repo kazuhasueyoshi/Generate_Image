@@ -2,6 +2,16 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <p>水増しページです</p>
+    <p>{{message}}</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="field">
+            <p><label>訓練データのフォルダパス</label><input type="text" name="input_path" id="nyuryoku1"></p>
+            <p><label>出力先</label><input type="text" name="output_path" id="nyuryoku2"></p>
+            <p><label>一枚につき何枚出力するのか</label><input type="text" name="N_img" id="nyuryoku3"></p>
+        </div>
+        <input type="submit" value="生成する">
+    </form>
+    <a href="{% url 'myprofile:index' %}">ホームへ戻る。</a>
 </head>
 </html>

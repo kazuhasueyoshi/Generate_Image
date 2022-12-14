@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.views import generic
 from . import apps
+from . import augmentation
+
 # Create your views here.
 class IndexView(generic.TemplateView):
     template_name = "index.html"
@@ -60,3 +62,25 @@ class test(generic.TemplateView):
 class Image_AugmentationView(generic.TemplateView):
     def __init__(self):
         self.template_name = "Image_Augmentation.html"
+    
+    def post(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            N_img = request.POST['N_img']
+            input_path = request.POST['input_path']
+            output_path = request.POST['output_path']
+        
+        self.context = {
+            "N_img": N_img,
+            "input_path": input_path,
+            "output_path": output_path,
+        }
+        try:
+            N_img = int(N_img)
+            ag = augmentation.Augmentation(N_img, input_path, output_path)
+            ag.generate_image()
+            self.context["message"] = "成功です。フォルダを確認してください。"
+        except:
+            self.context["message"] = "エラーが起きました。"
+            pass
+        return render(request, self.template_name, self.context)
+        #post以外にルーティングできない問題を早急に解決すべし。
