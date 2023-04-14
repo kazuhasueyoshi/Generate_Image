@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views import generic
 from . import apps
 from . import augmentation
+from . import solu_aug
+import cv2
 
 # Create your views here.
 class IndexView(generic.TemplateView):
@@ -20,6 +22,7 @@ class IndexView(generic.TemplateView):
             'message': request.POST['message'],
         }
         return render(request, self.template_name, context)
+
 
 class test(generic.TemplateView):
     template_name = "GAN_page.html"
@@ -62,25 +65,33 @@ class test(generic.TemplateView):
 class Image_AugmentationView(generic.TemplateView):
     def __init__(self):
         self.template_name = "Image_Augmentation.html"
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        self.context = {
+            "message" : "message",
+            "input_path" : "test",
+            "output_step" : "test",
+        }
+        return self.context
     
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
-            N_img = request.POST['N_img']
-            input_path = request.POST['input_path']
-            output_path = request.POST['output_path']
+            if "generate" in request.POST:
+                input_path = request.POST['input_path']
+                output_path = request.POST['output_path']
         
-        self.context = {
-            "N_img": N_img,
-            "input_path": input_path,
-            "output_path": output_path,
-        }
-        try:
-            N_img = int(N_img)
-            ag = augmentation.Augmentation(N_img, input_path, output_path)
-            ag.generate_image()
-            self.context["message"] = "成功です。フォルダを確認してください。"
-        except:
-            self.context["message"] = "エラーが起きました。"
-            pass
-        return render(request, self.template_name, self.context)
-        #post以外にルーティングできない問題を早急に解決すべし。
+                self.context = {
+                    "input_path": input_path,
+                    "output_path": output_path,
+                }
+                
+                #try:
+                sa = solu_aug.Solu_aug(input_path, output_path)
+                sa.generate_image()
+                self.context["message"] = "成功です。フォルダを確認してください。"
+                #except:
+                #    self.context["message"] = "エラーが起きました。"
+                #    pass
+                return render(request, self.template_name, self.context)
+                #post以外にルーティングできない問題を早急に解決すべし。
