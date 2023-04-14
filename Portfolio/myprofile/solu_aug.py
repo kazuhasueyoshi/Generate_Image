@@ -11,14 +11,12 @@ class Solu_aug():
         self.original_img = cv2.imread(self.input_path)
         #画像のサイズを整える
         height, width, channels = self.original_img.shape[:3]
-        print(height, width)
         if height < width:#横長の時は
             self.original_img = cv2.resize(self.original_img, (600, int(height * 600 / width)))
         else:#縦長の時は
             self.original_img = cv2.resize(self.original_img, (int(width * 600 / height), 600))
         
         height, width, channels = self.original_img.shape[:3]
-        print(height, width)
         #疑似的に射影を計算
         # 変換前後の対応点を設定
         for i in range(20):
