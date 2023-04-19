@@ -25,6 +25,19 @@ class Solu_aug():
             # 変換マトリクスと射影変換
             M = cv2.getPerspectiveTransform(p_original, p_trans)
             gen_img = cv2.warpPerspective(self.original_img, M, (width, height))
-            output_path = self.output_path + "/" + str(i) + "_gen_img.png"
+            output_path = self.output_path + "/" + str(i) + "_gen_right.png"
+            print(output_path)
+            cv2.imwrite(output_path, gen_img)
+        
+        for i in range(20):
+            p_original = np.float32([[0,0], [width,0], [0, height], [width, height]])
+            p_trans = np.float32([[width*i/100, (height - (height * 100 / (i + 100))) / 2], 
+                                  [width, 0], 
+                                  [width*i/100, (height + (height * 100 / (i + 100))) / 2], 
+                                  [width, height]])
+            # 変換マトリクスと射影変換
+            M = cv2.getPerspectiveTransform(p_original, p_trans)
+            gen_img = cv2.warpPerspective(self.original_img, M, (width, height))
+            output_path = self.output_path + "/" + str(i) + "_gen_left.png"
             print(output_path)
             cv2.imwrite(output_path, gen_img)

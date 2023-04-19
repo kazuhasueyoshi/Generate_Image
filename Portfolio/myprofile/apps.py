@@ -1,6 +1,5 @@
 from django.apps import AppConfig
-import tensorflow as tf
-import keras as K
+"""
 import numpy as np
 from torchvision import transforms
 from torchvision import datasets
@@ -12,11 +11,11 @@ import glob
 from torchvision import transforms
 from tensorflow.keras.utils import load_img, img_to_array
 import torch
-
+"""
 class MyprofileConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'myprofile'
-    
+"""   
 class PixelNorm(nn.Module):
     def forward(self, x):
         eps = 1e-7
@@ -220,7 +219,7 @@ def gradient_penalty(netD, real, fake, res, batch_size, gamma=1):
     return ((g.norm(2,dim=1)/gamma-1.0)**2).mean()
 
 """
-データセットの設定
+#データセットの設定
 """
 class MyDataset(torch.utils.data.Dataset):
     def __init__(self, path):
@@ -372,3 +371,4 @@ class Gen_Image():
 
             if j >= res_step*7:
                 break
+"""
