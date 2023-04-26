@@ -4,16 +4,23 @@ from PIL import Image
 import random
 import os
 class Solu_aug():
-    def __init__(self, input_path, output_path):# 1枚あたり20枚の画像を水増し
+    def __init__(self, input_path, output_path, class_n, back_path, txtfolder):# 1枚あたり20枚の画像を水増し
         # 入力画像の保存先パス
         self.input_path = input_path
         # 出力画像の保存先パス
         self.output_path = output_path
         self.wpn = 3 #射影変換の枚数(片方何枚か)
         self.size_n = 20 #一つの背景に張り付ける枚数
-        self.back_path = "C:\Solution\Generate_Image\images\\back"
-        self.txtfolder = "C:\Solution\Generate_Image\images\\txtfolder"
-        self.class_n = 0
+        if back_path == "":
+            self.back_path = "C:\Solution\Generate_Image\images\\back"
+        else:
+            self.back_path = back_path
+        
+        if txtfolder == "":
+            self.txtfolder = "C:\Solution\Generate_Image\images\\txtfolder"
+        else:
+            self.txtfolder = txtfolder
+        self.class_n = class_n
     
     def generate_image(self):#一枚から傾けた画像を数十枚生成する
         self.original_img = cv2.imread(self.input_path)
@@ -99,10 +106,10 @@ class Solu_aug():
                     new_x = random.randint(0, 1920 - x)#張り付ける座標
                     new_y = random.randint(0, 1080 - y)
                     back.paste(new_img, (new_x,new_y), new_img)
-                    output_path = self.output_path + "\\" + self.item_name + "_result_" + str(s)+"_" + str(i % 3) +"_" +str(m) + ".png"
+                    output_path = self.output_path + "\\" + self.item_name + "_result_" + str(s)+"_" + str(i) +"_" +str(m) + ".png"
                     back.save(output_path)
-                    f = open(self.txtfolder + "\\" + self.item_name + "_result_" + str(s)+"_" + str(i % 3) +"_" +str(m) + ".txt", 'w')
-                    x = (1 - i / 10) * x
+                    f = open(self.txtfolder + "\\" + self.item_name + "_result_" + str(s)+"_" + str(i) +"_" +str(m) + ".txt", 'w')
+                    x = (1 - (i%3) / 10) * x
                     f.write(str(self.class_n) + " " +
                             str(float((new_x + x / 2) / 1920)) + " "+
                             str(float((new_y + y / 2)) / 1080) + " "+

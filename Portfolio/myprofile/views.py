@@ -80,14 +80,20 @@ class Image_AugmentationView(generic.TemplateView):
             if "generate" in request.POST:
                 input_path = request.POST['input_path']
                 output_path = request.POST['output_path']
+                class_n = request.POST['class_n']
+                back_path = request.POST['back_path']
+                txtfolder = request.POST['txtfolder']
         
                 self.context = {
                     "input_path": input_path,
                     "output_path": output_path,
+                    "class_n" : class_n,
+                    "back_path" : back_path,
+                    "txtfolder" : txtfolder
                 }
                 
                 #try:
-                sa = solu_aug.Solu_aug(input_path, output_path)
+                sa = solu_aug.Solu_aug(input_path, output_path, class_n, back_path, txtfolder)
                 sa.generate_image()
                 sa.composite_photograph()
                 self.context["message"] = "成功です。フォルダを確認してください。"
