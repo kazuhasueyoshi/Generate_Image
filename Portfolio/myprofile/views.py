@@ -94,6 +94,7 @@ class Image_AugmentationView(generic.TemplateView):
                 
                 #try:
                 sa = solu_aug.Solu_aug(input_path, output_path, class_n, back_path, txtfolder)
+                sa.gen_ori_image()
                 sa.generate_image()
                 sa.composite_photograph()
                 self.context["message"] = "成功です。フォルダを確認してください。"

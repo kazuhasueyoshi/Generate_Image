@@ -10,19 +10,31 @@ class Solu_aug():
         # 出力画像の保存先パス
         self.output_path = output_path
         self.wpn = 3 #射影変換の枚数(片方何枚か)
-        self.size_n = 20 #一つの背景に張り付ける枚数
+        self.size_n = 10 #一つの背景に張り付ける枚数
         if back_path == "":
-            self.back_path = "C:\Solution\Generate_Image\images\\back"
+            self.back_path = "C:\Solution\Generate_Image\images\\sweetsback"
         else:
             self.back_path = back_path
         
         if txtfolder == "":
-            self.txtfolder = "C:\Solution\Generate_Image\images\\txtfolder"
+            self.txtfolder = "C:\Solution\Generate_Image\images\item01\\txt"
         else:
             self.txtfolder = txtfolder
         self.class_n = class_n
+
+    def gen_ori_image(self):
+        # 入力画像を読み込み(-1指定でαチャンネルも読み取る)
+        img = cv2.imread(self.input_path, -1)
+        # αチャンネルが0となるインデックスを取得
+        # ex) ([0, 1, 3, 3, ...],[2, 4, 55, 66, ...])
+        # columnとrowがそれぞれ格納されたタプル(長さ２)となっている
+        index = np.where(img[:, :, 3] == 0)
+        # 白塗りする
+        img[index] = [0, 0, 0, 255]
+        # 出力
+        cv2.imwrite(self.input_path, img)
     
-    def generate_image(self):#一枚から傾けた画像を数十枚生成する
+    def generate_image(self):#一枚から傾けた画像を数枚生成する
         self.original_img = cv2.imread(self.input_path)
         self.item_name = self.input_path[39:-4]
         print(self.item_name)
@@ -31,9 +43,9 @@ class Solu_aug():
         #画像のサイズを整える
         height, width, channels = self.original_img.shape[:3]
         if height < width:#横長の時は
-            self.original_img = cv2.resize(self.original_img, (600, int(height * 600 / width)))
+            self.original_img = cv2.resize(self.original_img, (300, int(height * 300 / width)))
         else:#縦長の時は
-            self.original_img = cv2.resize(self.original_img, (int(width * 600 / height), 600))
+            self.original_img = cv2.resize(self.original_img, (int(width * 300 / height), 300))
         
         height, width, channels = self.original_img.shape[:3]
         #疑似的に射影を計算
@@ -88,8 +100,8 @@ class Solu_aug():
         print(len(file))
         for s in range(len(file)):#背景の分繰り返し
             print(file[s])
-            self.back = Image.open("C:\Solution\Generate_Image\images\\back\\" + file[s])
-            self.back = self.back.resize((1920, 1080))
+            self.back = Image.open("C:\Solution\Generate_Image\images\\sweetsback\\" + file[s])
+            self.back = self.back.resize((960, 540))
 
             for i in range(self.wpn * 2):#射影変換で生成した分繰り返す
                 if i == self.wpn / 2 - 1:
@@ -100,20 +112,20 @@ class Solu_aug():
                 weight, height = img.size
                 for m in range(self.size_n):#20回張り付ける
                     back =self.back.copy()
-                    magnification = 0.5 + (m % 20)*0.05
+                    magnification = 0.5 + (m % 10)*0.1
                     new_img = img.resize((int(weight * magnification), int(height * magnification)))
                     x, y = new_img.size #resize後のサイズ
-                    new_x = random.randint(0, 1920 - x)#張り付ける座標
-                    new_y = random.randint(0, 1080 - y)
+                    new_x = random.randint(0, 960 - x)#張り付ける座標
+                    new_y = random.randint(0, 540 - y)
                     back.paste(new_img, (new_x,new_y), new_img)
                     output_path = self.output_path + "\\" + self.item_name + "_result_" + str(s)+"_" + str(i) +"_" +str(m) + ".png"
                     back.save(output_path)
                     f = open(self.txtfolder + "\\" + self.item_name + "_result_" + str(s)+"_" + str(i) +"_" +str(m) + ".txt", 'w')
                     x = (1 - (i%3) / 10) * x
                     f.write(str(self.class_n) + " " +
-                            str(float((new_x + x / 2) / 1920)) + " "+
-                            str(float((new_y + y / 2)) / 1080) + " "+
-                            str(x/1920) +" " + 
-                            str(y/1080))
+                            str(float((new_x + x / 2) / 960)) + " "+
+                            str(float((new_y + y / 2)) / 540) + " "+
+                            str(x/960) +" " + 
+                            str(y/540))
                     f.close()
 
